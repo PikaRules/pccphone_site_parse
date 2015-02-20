@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "_default": {
+            "link": "guillermo martel"
+        }, 
+        "guillermo martel": {
+            "applicationId": "mzk0tv3R3TyxzhUpePG5b87Xi14VmxS5kla0gz2R", 
+            "masterKey": "FWecHkSrgdP7ywuMVAPAQJnOSY0gioccTJoMjWZX"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.4"
+    }
+}

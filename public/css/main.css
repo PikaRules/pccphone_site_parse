@@ -1,0 +1,181 @@
+
+@font-face {
+    font-family: 'Droid Sans';
+    src: url(../fonts/DroidSans.ttf);
+}
+
+body {
+    font-family: 'Droid Sans', arial, sans-serif;
+}
+
+
+/* container */
+
+.container-fluid {
+    padding-right: 120px;
+    padding-left: 120px;
+    background-color: #37474f;
+    border-bottom: 1px solid rgb(47, 43, 43);
+    
+}
+
+.center-shrink{
+    width: 100%;
+    position: relative;
+    padding: 0 120px;
+}
+
+.navbar {
+    border: 0px;
+}
+
+.navbar label{
+    font-weight: bold;
+    font-size: 16px;
+    color:white;
+    margin: 2px 8px;
+}
+
+/* menu items brand */
+.navbar-default .navbar-brand {
+    color: #FA4343;
+    text-shadow: 0px 0px 3px rgba(216, 78, 78, 0.6);
+    font-size: 2.5em;
+}
+
+.navbar-default .navbar-brand:hover {
+    color: #FA4343;
+    text-shadow: 0px 0px 3px rgba(216, 78, 78, 0.6);
+    font-size: 2.5em;
+}
+
+/* menu items normal*/
+.navbar-default .navbar-nav>li>a {
+    color: #cfd8dc;
+    font-size: 1.5em;
+}
+
+
+/* menu items hover*/
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+    color: #D6D1ED;
+    text-shadow: 0px 0px 8px rgba(109, 229, 215, 0.5);
+    background-color: #605F69;
+}
+.navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    color: #cfd8dc;
+    font-size: 1.5em;
+    background-color: #37474f;
+}
+
+/* menu items active*/
+.navbar-default .navbar-nav>.active>a{
+    color: #B5D8E7;
+    text-shadow: 0px 0px 8px rgba(109, 219, 215, 0.6);
+    background-color: #37474f;
+}
+
+.navbar-default .navbar-nav>.active>a:hover{
+    color: #B5D8E7;
+    text-shadow: 0px 0px 8px rgba(109, 219, 215, 0.6);
+    background-color: #605F69;
+};
+
+
+
+/* botones */
+
+.btn.mybtn {
+    margin-left:8px;
+    margin-right: 8px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.btn-default:hover {
+    background-color: rgb(235, 255, 249);
+}
+
+.btn-primary{
+
+}
+
+
+
+
+/*  formato */
+
+.header {
+    margin: 40px 20px;
+}
+
+.center {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* card */
+
+
+.card {
+    border: 1px solid rgb(208, 193, 193);
+    padding: 35px;
+    border-radius: 12px;
+    background: rgb(247, 246, 255);
+}
+
+.card-shadow{
+    box-shadow: 2px 2px 4px rgba(219, 218, 218, 0.6);
+}
+
+
+
+/* home */
+
+.container-home {
+    width: 100%;
+    position: relative;
+    padding: 0 120px;
+}
+
+.home-banner-left{
+    position: relative;
+    width: 40%;
+    float: left;
+    padding: 20px 60px;
+    text-align: center;
+}
+
+.home-banner-right{
+    position: relative;
+    width: 60%;
+    float: left;
+    padding: 20px;
+}
+
+.home-banner-right .inner{
+    width: 500px;
+    white-space: pre-line;
+    font-size: 1.3em;
+}
+
+/* messages */
+
+.flash-message {
+    margin: 20px;
+    padding: 30px;
+    position: relative;
+    width: 100%
+}
+
+.flash-message.error{
+    color: rgb(210, 101, 101);
+    background-color: rgb(252, 234, 234);
+}
+
+.flash-message.info{
+    color: rgb(65, 65, 65);
+    background-color: rgb(223, 255, 221);
+}

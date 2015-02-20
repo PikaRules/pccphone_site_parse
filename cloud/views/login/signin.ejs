@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+
+     <% include ../partials/header_include_scripts %>
+     <% include ../partials/header_include_styles %>
+
+  </head>
+  <body>
+
+    <% include ../partials/header_navbar_clean %>
+
+
+    <div class="center-shrink">
+        <h1 class="center header">Login</h1>
+        <div class="center" style="width:400px">
+         <form class="form-signin card card-shadow" method='POST' action='/signin'>
+            <label class="form-signin-heading">Please sign in</label>
+            <div class="form-group">
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+            </div>
+            <div class="form-group">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
+            </div>
+            <div class="center">
+                <button class="btn mybtn btn-primary" type="submit">Sign in</button>
+                <button class="btn mybtn" btn-create-account type="button">Create account</button>
+            </div>
+          </form>
+        </div>
+
+    </div>
+
+
+    <script>
+        $('[btn-create-account]').click(function(){
+            location.href = '/signup';
+        });
+    </script>
+  </body>
+</html>

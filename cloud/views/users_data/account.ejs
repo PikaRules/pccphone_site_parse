@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+
+     <% include ../partials/header_include_scripts %>
+     <% include ../partials/header_include_styles %>
+
+     <script type="text/javascript" src="libs/CustomRegex.js"></script>
+     <script type="text/javascript" src="libs/FormValidator.js"></script>
+  </head>
+  <body>
+
+    <% include ../partials/header_navbar %>
+
+
+    <div class="center-shrink">
+        <h1 class="center header">My Twilio account</h1>
+        <div class="center" style="width:500px">
+         <form class="form-horizontal" form-account method='POST' action='/account'>
+ 
+            <div class="form-group">
+                <label for="account_sid" class=" col-sm-3">Account sid: </label>
+                <div class="col-sm-9">
+                  <input type="text" id="account_sid" name="account_sid" class="form-control account_sid" placeholder="Account sid" value="<%= account_sid %>">
+                   <div class=" error message account_sid_message" style="display:none;"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="auth_token" class=" col-sm-3">Auth token: </label>
+                <div class="col-sm-9">
+                  <input type="text" id="auth_token" name="auth_token" class="form-control auth_token" placeholder="Auth key" value="<%= auth_token %>">
+                  <div class=" error message auth_token_message" style="display:none;"></div>
+                </div>
+            </div>
+            <div class="center">
+                <button class="btn mybtn btn-primary" btn-save type="button">Save</button>
+            </div>
+          </form>
+          <div class="flash-message message error" style="display:none;"></div>
+          <% if ( flash != '' ) { %>
+            <div class="flash-message info" ><%= flash %></div>
+          <% } %>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        $('.nav li').attr('class', '');
+        $('[nav-twilio-account]').attr('class', 'active');
+        
+
+        form = new FormValidator([{
+          elClass: 'account_sid',
+          verifyMethod: 'isAlphaNum',
+          showErrorIn: 'account_sid_message',
+          required: true
+        },{
+          elClass: 'auth_token',
+          verifyMethod: 'isAlphaNum',
+          showErrorIn: 'auth_token_message',
+          required: true
+        }],{
+          invalidElementStyle: 'border: 1px solid red;',
+          invalidElementClass: 'errors'
+        });
+
+
+        $('[btn-save]').click(function(){
+            form.clear();
+            if ( form.check() ) {
+                $('[form-account]').submit();
+            } 
+        });
+    </script>
+  </body>
+</html>
