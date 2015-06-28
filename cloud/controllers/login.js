@@ -6,7 +6,7 @@ module.exports = function(){
 
     // Render the login page
     app.get('/signin', function(req, res) {
-        res.render('login/signin');
+        res.render('login/signin', {flash:''});
     });
 
 
@@ -16,8 +16,30 @@ module.exports = function(){
           res.redirect('/');
         }, function(error) {
           // Show the error
-          res.render('login', { flash: error.message });
+          res.render('login/signin', { flash: error.message });
         });
+    });
+
+    app.get('/facebook_signin', function(req, res) {
+        //https://github.com/Thuzi/facebook-node-sdk/
+        //https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.3
+        //https://parse.com/tutorials/adding-third-party-authentication-to-your-web-app
+        Parse.FacebookUtils.init();
+        Parse.FacebookUtils.logIn(null, {
+      success: function(user) {
+        if (!user.existed()) {
+          res.render('login/signin', { flash: "user logged" });
+        } else {
+          res.render('login/signin', { flash: "user not logged" });
+        }
+      },
+      error: function(user, error) {
+        res.render('login/signin', { flash: "error" });
+      }
+    });
+
+        
+
     });
 
 

@@ -3,7 +3,9 @@
   <head>
     <title>Login</title>
 
+     
      <% include ../partials/header_include_scripts %>
+     <% include ../partials/header_include_facebook %>
      <% include ../partials/header_include_styles %>
 
   </head>
@@ -25,19 +27,80 @@
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
             </div>
+            <div class="form-group">
+              <% if ( flash != '' ) { %>
+                  <div style="margin-left:0px;" class="flash-message error"><%= flash %></div>
+              <% } %>
+            </div>
             <div class="center">
                 <button class="btn mybtn btn-primary" type="submit">Sign in</button>
                 <button class="btn mybtn" btn-create-account type="button">Create account</button>
             </div>
+
+            <div class="login-hr-line"  ></div>
+
+            <a class="btn btn-block  btn-social btn-facebook" btn-facebook-login role="button">
+              <i class="fa fa-facebook"></i> Sign in with Facebook
+            </a>
           </form>
         </div>
-
+        
     </div>
 
 
     <script>
         $('[btn-create-account]').click(function(){
             location.href = '/signup';
+        });
+        
+        $('[btn-facebook-login]').click(function(){
+            if( Parse != null ) {
+              Parse.FacebookUtils.logIn("public_profile,email", {
+                success: function(user) {
+                    var currentUser = Parse.User.current();
+                    console.log(currentUser);
+                    console.log(currentUser.get("username"));
+                    console.log("sessionToken: " + user.getSessionToken());
+
+/*
+                    $.ajax({
+                      type: "POST",
+                      url: url,
+                      data: data,
+                      success: success,
+                      dataType: dataType
+                    })
+                    .done(function() {
+                      console.log( "login facebook sucess" );
+                    })
+                    .fail(function() {
+                      console.log( "error" );
+                    });
+*/
+                    FB.api(
+                        "/" + user.attributes.authData.facebook.id,
+                        function (response) {
+                          if (response && !response.error) {
+                            console.log("fb:");
+                            console.log(response);
+                          }
+                        }
+                    );
+
+                    if (!user.existed()) {
+                        console.log("User signed up and logged in through Facebook!");
+                        //location.href = '/';
+                        
+                    } else {
+                        console.log("User logged in through Facebook!");
+                        //location.href = '/';
+                    }
+                },
+                error: function(user, error) {
+                  alert("User cancelled the Facebook login or did not fully authorize.");
+                }
+              });
+            }
         });
     </script>
   </body>
