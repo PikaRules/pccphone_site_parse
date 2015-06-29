@@ -2,18 +2,24 @@
 
 module.exports = function (req, res, next) {
 
-    //if( typeof req.session != "undefined" ) {
-    //    Parse.User.become(req.session.token ? req.session.token: "gibberish").then(function(user) { 
-    if( typeof Parse.Session != "undefined" ) {
-        Parse.User.become(Parse.Session.sessionToken  ? Parse.Session.sessionToken: "gibberish").then(function(user) { 
-        // If null is passed to .become() it will assume current(), which we don't want
-        //    [ user is now the client authenticated user ]
-            checkLogin(req, res, next, user);
-        });
-    }
-    else {
-        checkLogin(req, res, next, null);
-    }
+
+
+
+    var GameScore = Parse.Object.extend("User");
+
+    var query = new Parse.Query(GameScore);
+    query.get("wBX3mpQbfr", {
+      success: function(gameScore) {
+        //checkLogin(req, res, next, gameScore);
+      },
+      error: function(object, error) {
+        // The object was not retrieved successfully.
+        // error is a Parse.Error with an error code and message.
+      }
+    });
+
+    checkLogin(req, res, next, null);
+ 
   
 };
 

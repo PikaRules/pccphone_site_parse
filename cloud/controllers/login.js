@@ -20,25 +20,39 @@ module.exports = function(){
         });
     });
 
-    app.get('/facebook_signin', function(req, res) {
+    app.post('/facebook_login', function(req, res) {
         //https://github.com/Thuzi/facebook-node-sdk/
         //https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.3
         //https://parse.com/tutorials/adding-third-party-authentication-to-your-web-app
-        Parse.FacebookUtils.init();
-        Parse.FacebookUtils.logIn(null, {
-      success: function(user) {
-        if (!user.existed()) {
-          res.render('login/signin', { flash: "user logged" });
-        } else {
-          res.render('login/signin', { flash: "user not logged" });
-        }
-      },
-      error: function(user, error) {
-        res.render('login/signin', { flash: "error" });
-      }
-    });
 
-        
+        var sessionToken = req.body.sessionToken;
+        var email = req.body.email;
+        var firstname = req.body.firstname;
+        var lastname = req.body.lastname;
+        var user_existed = req.body.user_existed;
+
+        //login user in backend using fronted user facebook session
+        Parse.User.become(sessionToken).then(function (user) {
+            //update user data if it is first time facebook login
+            if ( firstname ) {
+                user.set("email", email);
+                user.set("firstname", firstname);
+                user.set("lastname", lastname);
+                user.save(null,{
+                    success: function(nuser) {
+                        res.status(200).json({ sucess: true, error:"" });
+                    },
+                    error: function(error) {
+                      res.status(200).json({ sucess: true, error:"user new data not saved" });
+                    }
+                });
+            } else {
+                res.status(200).json({ sucess: true, error:"" });
+            }
+
+        }, function (error) {
+          res.status(500).json({ sucess: false, error:"" });
+        });
 
     });
 

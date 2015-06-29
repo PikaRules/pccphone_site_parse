@@ -17,7 +17,7 @@
     <div class="center-shrink">
         <h1 class="center header">Login</h1>
         <div class="center" style="width:400px">
-         <form class="form-signin card card-shadow" method='POST' action='/signin'>
+         <form class="form-signin card card-shadow loading-container" method='POST' action='/signin'>
             <label class="form-signin-heading">Please sign in</label>
             <div class="form-group">
                 <label for="inputEmail" class="sr-only">Email address</label>
@@ -27,13 +27,15 @@
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
             </div>
-            <div class="form-group">
+            <div class="form-group" >
               <% if ( flash != '' ) { %>
-                  <div style="margin-left:0px;" class="flash-message error"><%= flash %></div>
+                  <div style="margin-left:0px;" class="flash-message error" error-message-div><%= flash %></div>
+              <% } else { %>
+                  <div style="margin-left:0px;display:none;" class="flash-message error" error-message-div></div>
               <% } %>
             </div>
             <div class="center">
-                <button class="btn mybtn btn-primary" type="submit">Sign in</button>
+                <button class="btn mybtn btn-primary" btn-parse-login type="submit">Sign in</button>
                 <button class="btn mybtn" btn-create-account type="button">Create account</button>
             </div>
 
@@ -42,6 +44,13 @@
             <a class="btn btn-block  btn-social btn-facebook" btn-facebook-login role="button">
               <i class="fa fa-facebook"></i> Sign in with Facebook
             </a>
+
+
+            <div class="loading-mask" loading-mask>
+               <div class="loading-icon-container">
+                   <img class="loading-icon" src="/img/loading.gif">
+               </div>
+           </div>
           </form>
         </div>
         
@@ -49,59 +58,113 @@
 
 
     <script>
+
+
+
         $('[btn-create-account]').click(function(){
             location.href = '/signup';
         });
         
         $('[btn-facebook-login]').click(function(){
             if( Parse != null ) {
+              loadingMaskVisible(true);
               Parse.FacebookUtils.logIn("public_profile,email", {
                 success: function(user) {
                     var currentUser = Parse.User.current();
+                    var username = currentUser.get("username");
+                    var firstname = currentUser.get("firstname");
+                    var user_existed = false;
                     console.log(currentUser);
-                    console.log(currentUser.get("username"));
+                    console.log("username: " + username);
+                    console.log("firstname: " + firstname);
                     console.log("sessionToken: " + user.getSessionToken());
 
-/*
-                    $.ajax({
-                      type: "POST",
-                      url: url,
-                      data: data,
-                      success: success,
-                      dataType: dataType
-                    })
-                    .done(function() {
-                      console.log( "login facebook sucess" );
-                    })
-                    .fail(function() {
-                      console.log( "error" );
-                    });
-*/
-                    FB.api(
-                        "/" + user.attributes.authData.facebook.id,
-                        function (response) {
-                          if (response && !response.error) {
-                            console.log("fb:");
-                            console.log(response);
-                          }
-                        }
-                    );
-
                     if (!user.existed()) {
-                        console.log("User signed up and logged in through Facebook!");
-                        //location.href = '/';
-                        
+                      console.log("User signed up and logged in through Facebook!");
                     } else {
-                        console.log("User logged in through Facebook!");
-                        //location.href = '/';
+                      console.log("User logged in through Facebook!");
+                      user_existed = true;
                     }
+
+                    if ( firstname == undefined || firstname == "" ) {
+                      //get firstname and lastname 
+                      FB.api(
+                          "/" + user.attributes.authData.facebook.id,
+                          function (response) {
+                            var fb_first_name;
+                            var fb_last_name;
+                            var fb_email;
+                            if (response && !response.error) {
+                              console.log("fb:");
+                              console.log(response);
+                              fb_first_name = response.first_name;
+                              fb_last_name = response.last_name;
+                              fb_email = response.email;
+                            }
+                            //post fblogin
+                            postFBLogin(user, user_existed, fb_email, fb_first_name, fb_last_name);
+
+                          }
+                      );
+                    } else {
+                      postFBLogin(user,user_existed, null, null, null);
+                    }
+
+                    
                 },
                 error: function(user, error) {
                   alert("User cancelled the Facebook login or did not fully authorize.");
+                  loadingMaskVisible(false);
                 }
               });
             }
         });
+
+        var postFBLogin = function(user,user_existed, email, firstname, lastname) {
+            var sessionToken = user._sessionToken;
+
+            // Post the login
+            $.ajax({
+              url: '/facebook_login',
+              type: 'post',
+              data: { 
+                sessionToken: sessionToken,
+                email: email,
+                firstname: firstname,
+                lastname: lastname,
+                user_existed: user_existed
+              }
+            })
+            .done(function(response) {
+              console.log(response);
+              console.log( "login facebook sucess" );
+              if (response.sucess){
+                location.href = '/';
+              } else {
+                showErrorMessage(response.message);
+                loadingMaskVisible(false);
+              }
+              
+            })
+            .fail(function(response) {
+              loadingMaskVisible(false);
+              showErrorMessage(response.message);
+            });
+        }
+
+        var showErrorMessage = function(message){
+          $('[error-message-div]').html(message).show();
+        }
+
+        var loadingMaskVisible = function(visible){
+          if (visible){
+            $('[loading-mask]').show();
+          } else {
+            $('[loading-mask]').hide();
+          }
+          
+        }
+
     </script>
   </body>
 </html>
